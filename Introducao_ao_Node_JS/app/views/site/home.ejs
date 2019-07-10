@@ -9,5 +9,11 @@
 		<h1>Página Principal</h1>
 		<% var texto = "Trabalhando com EJS"; %>
 		<p><%= texto %></p>
+
+		<ul>
+			<% for(var chave in clientes) { %>
+				<li><%= clientes[chave].nome %> - <%= clientes[chave].email %></li>
+			<% } %>
+		</ul>
 	</body>
 </html>
