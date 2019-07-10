@@ -6,6 +6,11 @@ module.exports = function(app) {
 		clienteController.index(req, res);
 	});
 
+	app.get('/detalhe/:id', function(req, res) {
+		clienteController.show(req, res);
+		//console.log(req.params.id);
+	});
+
 	app.get('/contato', function(req, res) {
 		res.render('site/contato');
 	});
