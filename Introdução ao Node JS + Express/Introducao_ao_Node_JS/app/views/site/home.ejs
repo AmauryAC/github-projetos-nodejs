@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Introdução ao Node JS</title>
+	</head>
+	<body>
+		<h1>Página Principal</h1>
+		<% var texto = "Trabalhando com EJS"; %>
+		<p><%= texto %></p>
+
+		<ul>
+			<% for(var k in clientes) { %>
+				<li><%= clientes[k].nome %> - <%= clientes[k].email %></li>
+			<% } %>
+		</ul>
+		<br>
+
+		<% if(erros) { %>
+			<ul>
+				<% for(var k in erros) { %>
+					<li><%= erros[k].msg %></li>
+				<% } %>
+			</ul>
+		<% } %>
+
+		<form action="/" method="post">
+			<input type="text" name="nome" value="<%= dados.nome %>" placeholder="Nome">
+			<input type="text" name="email" value="<%= dados.email %>" placeholder="E-mail">
+			<button>Adicionar</button>
+		</form>
+	</body>
+</html>
