@@ -4,8 +4,9 @@ var clienteModel = require('../models/clienteModel')();
 module.exports = function(app) {
 	app.get('/', function(req, res) {
 		//console.log(clienteModel.all());
-		var listaClientes = clienteModel.all();
-		res.render('site/home', {clientes: listaClientes});
+		clienteModel.all(function(erro, resultado) {
+			res.render('site/home', {clientes: resultado});
+		});
 	});
 
 	app.get('/contato', function(req, res) {
