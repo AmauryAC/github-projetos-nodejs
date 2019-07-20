@@ -1,7 +1,7 @@
 var mysql = require('mysql');
 
 var connMySQL = function() {
-  console.log("Conexão com BD foi estabelecida");
+  //console.log("Conexão com BD foi estabelecida");
 
   return mysql.createConnection({
     host: 'localhost',
