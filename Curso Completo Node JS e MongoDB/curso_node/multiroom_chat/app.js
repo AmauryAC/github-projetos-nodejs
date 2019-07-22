@@ -17,4 +17,24 @@ io.on('connection', function(socket) {
   socket.on('disconnect', function() {
     console.log('Usuário desconectou');
   });
+
+  socket.on('msgParaServidor', function(data) {
+    // Envia só pra quem emitiu
+    socket.emit(
+      'msgParaCliente',
+      {
+        apelido: data.apelido,
+        mensagem: data.mensagem
+      }
+    );
+
+    // Envia pra todos os outros usuários
+    socket.broadcast.emit(
+      'msgParaCliente',
+      {
+        apelido: data.apelido,
+        mensagem: data.mensagem
+      }
+    );
+  });
 });
