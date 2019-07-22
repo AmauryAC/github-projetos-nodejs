@@ -19,6 +19,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('msgParaServidor', function(data) {
+    // Diálogo
     // Envia só pra quem emitiu
     socket.emit(
       'msgParaCliente',
@@ -36,5 +37,24 @@ io.on('connection', function(socket) {
         mensagem: data.mensagem
       }
     );
+
+    // Participantes
+    // Envia só pra quem emitiu
+    if(parseInt(data.apelido_atualizado_nos_clientes) == 0) {
+      socket.emit(
+        'participantesParaCliente',
+        {
+          apelido: data.apelido
+        }
+      );
+
+      // Envia pra todos os outros usuários
+      socket.broadcast.emit(
+        'participantesParaCliente',
+        {
+          apelido: data.apelido
+        }
+      );
+    }
   });
 });
