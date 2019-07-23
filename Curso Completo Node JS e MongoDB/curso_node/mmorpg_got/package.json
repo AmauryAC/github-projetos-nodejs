@@ -14,6 +14,6 @@
     "ejs": "^2.6.2",
     "express": "^4.17.1",
     "express-validator": "^2.20.8",
-    "mongodb": "^3.3.0-beta2"
+    "mongodb": "^2.2.10"
   }
 }
