@@ -3,6 +3,7 @@ var express = require('express');
 var consign = require('consign');
 var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
+var expressSession = require('express-session');
 
 // Iniciar o objeto do express
 var app = express();
@@ -19,6 +20,13 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 // Configurar o middleware express-validator
 app.use(expressValidator());
+
+// Configurar o middleware express-session
+app.use(expressSession({
+  secret: 'hjsdgdsuihois',
+  resave: false,
+  saveUninitialized: false
+}));
 
 // Efetuar o autoload das rotas, dos models e dos controllers para o objeto app
 consign()
