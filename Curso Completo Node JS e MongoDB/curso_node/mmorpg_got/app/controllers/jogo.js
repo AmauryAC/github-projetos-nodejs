@@ -49,10 +49,10 @@ module.exports.pergaminhos = function(app, req, res) {
 };
 
 module.exports.ordenar_acao_sudito = function(app, req, res) {
-  if(req.session.autorizado !== true) {
+  /*if(req.session.autorizado !== true) {
     res.render('index', {validacao: {}});
     return;
-  }
+  }*/
 
   var dadosForm = req.body;
 
@@ -74,4 +74,15 @@ module.exports.ordenar_acao_sudito = function(app, req, res) {
   JogoDAO.acao(dadosForm);
 
   res.redirect('jogo?msg=B');
+};
+
+module.exports.revogar_acao = function(app, req, res) {
+  var url_query = req.query;
+
+  var connection = app.config.dbConnection;
+  var JogoDAO = new app.app.models.JogoDAO(connection);
+
+  var _id = url_query.id_acao;
+
+  JogoDAO.revogarAcao(_id, res);
 };
