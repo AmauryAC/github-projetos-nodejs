@@ -3,6 +3,7 @@ var express = require('express'),
     multiparty = require('connect-multiparty'),
     mongodb = require('mongodb'),
     objectId = require('mongodb').ObjectId,
+    fs = require('fs'),
     mv = require('mv');
 
 var app = express();
@@ -72,6 +73,8 @@ app.post('/api', function(req, res) {
 
 // GET (Read)
 app.get('/api', function(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+
   db.open(function(err, mongoclient) {
     mongoclient.collection('postagens', function(err, collection) {
       collection.find().toArray(function(err, results) {
@@ -101,6 +104,20 @@ app.get('/api/:id', function(req, res) {
         mongoclient.close();
       });
     });
+  });
+});
+
+app.get('/imagens/:imagem', function(req, res) {
+  var img = req.params.imagem;
+
+  fs.readFile('./uploads/' + img, function(err, content) {
+    if(err) {
+      res.status(400).json(err);
+      return;
+    }
+
+    res.writeHead(200, {'Content-type' : 'image/jpg'});
+    res.end(content);
   });
 });
 
