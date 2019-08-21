@@ -14,6 +14,15 @@ app.use(bodyParser.json());
 
 app.use(multiparty());
 
+app.use(function(req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+
+  next();
+});
+
 var port = 8080;
 
 app.listen(port);
@@ -32,8 +41,6 @@ app.get('/', function(req, res) {
 
 // POST (Create)
 app.post('/api', function(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-
   var date = new Date();
   var time_stamp = date.getTime();
 
@@ -73,8 +80,6 @@ app.post('/api', function(req, res) {
 
 // GET (Read)
 app.get('/api', function(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-
   db.open(function(err, mongoclient) {
     mongoclient.collection('postagens', function(err, collection) {
       collection.find().toArray(function(err, results) {
@@ -127,7 +132,12 @@ app.put('/api/:id', function(req, res) {
     mongoclient.collection('postagens', function(err, collection) {
       collection.update(
         {_id: objectId(req.params.id)},
-        {$set: {titulo: req.body.titulo}},
+        {$push: {comentarios: {
+                                id_comentario: new objectId(),
+                                comentario: req.body.comentario
+                              }
+                }
+        },
         {},
         function(err, records) {
           if(err) {
