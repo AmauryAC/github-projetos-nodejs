@@ -1,13 +1,17 @@
 var express = require('express'),
     bodyParser = require('body-parser'),
+    multiparty = require('connect-multiparty'),
     mongodb = require('mongodb'),
-    objectId = require('mongodb').ObjectId;
+    objectId = require('mongodb').ObjectId,
+    mv = require('mv');
 
 var app = express();
 
 // Body-parser
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+
+app.use(multiparty());
 
 var port = 8080;
 
@@ -27,22 +31,40 @@ app.get('/', function(req, res) {
 
 // POST (Create)
 app.post('/api', function(req, res) {
-  var dados = req.body;
+  res.setHeader('Access-Control-Allow-Origin', '*');
 
-  // Fazer validação
+  var date = new Date();
+  var time_stamp = date.getTime();
 
-  db.open(function(err, mongoclient) {
-    mongoclient.collection('postagens', function(err, collection) {
-      collection.insert(dados, function(err, records) {
-        if(err) {
-          //res.json(err);
-          res.json({'status': 'Erro'});
-        }
-        else {
-          //res.json(records);
-          res.json({'status': 'OK'});
-        }
-        mongoclient.close();
+  var url_imagem = time_stamp + '_' + req.files.arquivo.originalFilename;
+
+  var path_origem = req.files.arquivo.path;
+  var path_destino = './uploads/' + url_imagem;
+
+  mv(path_origem, path_destino, function(err) {
+    if(err) {
+      res.status(500).json({error: err});
+      return;
+    }
+
+    var dados = {
+      url_imagem: url_imagem,
+      titulo: req.body.titulo
+    }
+
+    db.open(function(err, mongoclient) {
+      mongoclient.collection('postagens', function(err, collection) {
+        collection.insert(dados, function(err, records) {
+          if(err) {
+            //res.json(err);
+            res.json({'status': 'Erro'});
+          }
+          else {
+            //res.json(records);
+            res.json({'status': 'OK'});
+          }
+          mongoclient.close();
+        });
       });
     });
   });
